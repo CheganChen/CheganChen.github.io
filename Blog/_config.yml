@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: pixel博客
 subtitle: ''
-description: ''
+description: '啥都写，仅自用！'
 keywords:
-author: John Doe
-language: en
+author: pixel
+language: zh-CN
 timezone: ''
 
 # URL
@@ -97,6 +97,7 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: butterfly
+baidu_analytics: 2f9f32a75765f2b46ea5e94ee380f920
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
