@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>领域驱动设计理解篇 | pixel博客</title><meta name="author" content="pixel"><meta name="copyright" content="pixel"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="领域驱动设计 DDD(Domain-Driven Design)，是一种基于业务开发设计模式。厉害的东西总能用一句话解释清楚，hhh，用一句话可以总结成： DDD是通过对象构建一套上下文，支撑所有相关的业务逻辑！  下面会列举一些我觉得对我理解DDD很有帮助的一些概念(一些晦涩难懂冗长的就不介绍了)。 上下文 在介绍DDD之前，我觉得有必要先理解上下文这个概念，这样才能理解DDD中更难懂的界限上下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域驱动设计理解篇">
+<meta property="og:url" content="http://example.com/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/index.html">
+<meta property="og:site_name" content="pixel博客">
+<meta property="og:description" content="领域驱动设计 DDD(Domain-Driven Design)，是一种基于业务开发设计模式。厉害的东西总能用一句话解释清楚，hhh，用一句话可以总结成： DDD是通过对象构建一套上下文，支撑所有相关的业务逻辑！  下面会列举一些我觉得对我理解DDD很有帮助的一些概念(一些晦涩难懂冗长的就不介绍了)。 上下文 在介绍DDD之前，我觉得有必要先理解上下文这个概念，这样才能理解DDD中更难懂的界限上下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/image/lbxx.png">
+<meta property="article:published_time" content="2025-05-08T15:44:29.000Z">
+<meta property="article:modified_time" content="2025-05-08T17:36:29.310Z">
+<meta property="article:author" content="pixel">
+<meta property="article:tag" content="业务理解">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image/lbxx.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "领域驱动设计理解篇",
+  "url": "http://example.com/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/",
+  "image": "http://example.com/image/lbxx.png",
+  "datePublished": "2025-05-08T15:44:29.000Z",
+  "dateModified": "2025-05-08T17:36:29.310Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "pixel",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/image/lbxx.png"><link rel="canonical" href="http://example.com/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '领域驱动设计理解篇',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/styles/main.css"><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">pixel博客</span></a><a class="nav-page-title" href="/"><span class="site-name">领域驱动设计理解篇</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">领域驱动设计理解篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-08T15:44:29.000Z" title="发表于 2025-05-08 23:44:29">2025-05-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-08T17:36:29.310Z" title="更新于 2025-05-09 01:36:29">2025-05-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="领域驱动设计"><a href="#领域驱动设计" class="headerlink" title="领域驱动设计"></a>领域驱动设计</h1><blockquote>
+<p>DDD(Domain-Driven Design)，是一种基于业务开发设计模式。厉害的东西总能用一句话解释清楚，hhh，用一句话可以总结成：</p>
+<p><strong>DDD是通过对象构建一套上下文，支撑所有相关的业务逻辑！</strong></p>
+</blockquote>
+<p>下面会列举一些我觉得对我理解DDD很有帮助的一些概念(一些晦涩难懂冗长的就不介绍了)。</p>
+<h2 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h2><blockquote>
+<p>在介绍DDD之前，我觉得有必要先理解上下文这个概念，这样才能理解DDD中更难懂的界限上下文了。</p>
+</blockquote>
+<p>其实我们编写程序，大概都是这个的范式(以我正在做的塔防游戏举个例子):</p>
+<ul>
+<li>触发。即一段逻辑运行的原因。这个原因可以是比如:<ul>
+<li>敌人进入防御塔的攻击范围</li>
+<li>敌人到达路径节点</li>
+<li>敌人到达基地</li>
+<li>玩家放置防御塔</li>
+<li>玩家点击防御塔</li>
+</ul>
+</li>
+<li>做决策。俗称业务逻辑。比如<ul>
+<li>防御塔评估目标是否有效(阵营、距离，攻击CD等)</li>
+<li>敌人评估路径状态(完整、部分、被阻挡)</li>
+<li>敌人检查是否可以攻击(是否在攻击CD中，基地是否受金身)</li>
+<li>系统检查放置是否有效(成本、空间、网格位置)</li>
+<li>系统检查防御塔是否可选</li>
+</ul>
+</li>
+<li>执行。比如:<ul>
+<li>防御塔执行攻击(即时命中或发射弹道)并造成伤害</li>
+<li>敌人继续移动或开始攻击(如果被阻挡)</li>
+<li>敌人对基地造成伤害并被移除</li>
+<li>防御塔被放置并更新网格</li>
+<li>防御塔被选中并更新UI</li>
+</ul>
+</li>
+</ul>
+<p>总结起来就是：1.触发XXX -&gt; 2.获取XXX相关的所有信息 -&gt; 3.决策执行XXX</p>
+<p>比如我们得先获取信息：这个敌人是个怎样的敌人，它当前的状态是怎样的，然后根据这些信息做一个逻辑运算，最后得出结论具体如何去处理这次触发。</p>
+<p>在做决策的步骤中，一个关键的步骤就是根据足够多的信息做决策。<br><strong>所有必要的信息统称为【上下文】。</strong></p>
+<p>那么界限上下文是不是就是根据业务场景对上下文进行了一个拆分呢？显然是可以这样理解的，哈哈哈哈。</p>
+<h2 id="聚合根"><a href="#聚合根" class="headerlink" title="聚合根"></a>聚合根</h2><blockquote>
+<p>聚合是具有关联关系的实体对象的集合，聚合根是其中一个核心实体（没它整个家都得散）。</p>
+<p>聚合根不仅仅是数据的容器，还应该封装与聚合相关的业务逻辑。</p>
+</blockquote>
+<p><strong>聚合根其实是聚合中的一个特殊实体对象</strong>，它不仅负责维护聚合内其他实体对象，还负责和外部进行交互（这样可以保证一致性），</p>
+<p>举个书中的例子：</p>
+<p>首先边界定义了这个聚合内有什么，其次是聚合根定义了聚合里什么是核心？</p>
+<p>1.边界：汽车、轮子、轮胎</p>
+<p>2.聚合根：汽车</p>
+<p><strong>那为什么汽车是核心呢？</strong></p>
+<p>1.如果你想购买一辆车子，你想看车内的一些配件，是不是会先查询对应的车型，然后去实体店看某一辆车内（或者线上的某一个带有编号的车）的一些配件（座椅、轮胎、材料等）。所以你是通过某一辆汽车才能了解到其内部的配件，汽车可以负责和外部进行交互。但如果说你通过某一个带编号的轮胎去找一辆具体的汽车会不会就显得很怪。</p>
+<p>2.如果你想改装轮胎样式，你得先查询哪辆车的哪个轮胎需要改装，然后才能在车的某一个位置换上合适的轮胎或者对轮胎进行颜色替换（这是对数据进行修改），只能通过车子去访问轮胎，而不能直接访问某一个汽车的某一个轮胎，不然车子会莫名奇妙变色。这保证了数据的一致性</p>
+<p><strong>所以汽车能成为聚合根。</strong></p>
+<p>那车里面的发动机算什么呢？其实它也是一个聚合根，其实现实生活中有很多产品都有它独自的序号，厂家会根据序号追踪产品的动向。这里引出聚合根的另一个属性</p>
+<blockquote>
+<p>聚合内部的对象可以保持对其他聚合根的引用</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>目前的理解：DDD根据业务场景，划分界限形成不同的聚合，聚合根实际上是通过实体对象构建了一个界限上下文，从而支撑了这个聚合内的所有业务逻辑！</p>
+<p>总结就一句话：<strong>DDD是通过对象构建一套上下文，支撑所有相关的业务逻辑！</strong> </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">pixel</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/">http://example.com/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">pixel博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%B8%9A%E5%8A%A1%E7%90%86%E8%A7%A3/">业务理解</a></div><div class="post-share"><div class="social-share" data-image="/image/lbxx.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" title="计算机操作系统"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">计算机操作系统</div></div><div class="info-2"><div class="info-item-1">计算机操作系统 - 概述基本特征1. 并发并发是指宏观上在一段时间内能同时运行多个程序，而并行则指同一时刻能运行多个指令。 并行需要硬件支持，如多流水线、多核处理器或者分布式计算系统。 操作系统通过引入进程和线程，使得程序能够并发运行。 2. 共享共享是指系统中的资源可以被多个并发进程共同使用。 有两种共享方式：互斥共享和同时共享。 互斥共享的资源称为临界资源，例如打印机等，在同一时刻只允许一个进程访问，需要用同步机制来实现互斥访问。 3. 虚拟虚拟技术把一个物理实体转换为多个逻辑实体。 主要有两种虚拟技术：时（时间）分复用技术和空（空间）分复用技术。 多个进程能在同一个处理器上并发执行使用了时分复用技术，让每个进程轮流占用处理器，每次只执行一小个时间片并快速切换。 虚拟内存使用了空分复用技术，它将物理内存抽象为地址空间，每个进程都有各自的地址空间。地址空间的页被映射到物理内存，地址空间的页并不需要全部在物理内存中，当使用到一个没有在物理内存的页时，执行页面置换算法，将该页置换到内存中。 4....</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/image/lbxx.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">pixel</div><div class="author-info-description">啥都写，仅自用！</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.</span> <span class="toc-text">领域驱动设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">1.1.</span> <span class="toc-text">上下文</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9"><span class="toc-number">1.2.</span> <span class="toc-text">聚合根</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/08/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1%E7%90%86%E8%A7%A3%E7%AF%87/" title="领域驱动设计理解篇">领域驱动设计理解篇</a><time datetime="2025-05-08T15:44:29.000Z" title="发表于 2025-05-08 23:44:29">2025-05-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/20/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" title="计算机操作系统">计算机操作系统</a><time datetime="2025-02-20T09:48:37.000Z" title="发表于 2025-02-20 17:48:37">2025-02-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/07/lua%E5%9F%BA%E7%A1%80/" title="lua基础">lua基础</a><time datetime="2025-02-07T10:45:45.000Z" title="发表于 2025-02-07 18:45:45">2025-02-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/07/c-%E5%9F%BA%E7%A1%80/" title="cpp基础">cpp基础</a><time datetime="2025-02-07T08:41:27.000Z" title="发表于 2025-02-07 16:41:27">2025-02-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/06/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络">计算机网络</a><time datetime="2025-02-06T14:25:32.000Z" title="发表于 2025-02-06 22:25:32">2025-02-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By pixel</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="/styles/fish.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
