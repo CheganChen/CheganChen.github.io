@@ -6,3 +6,6 @@ node_modules/
 public/
 .deploy*/
 _multiconfig.yml
+/.idea/.idea.Blog.dir/.idea/.gitignore
+/.idea/.idea.Blog.dir/.idea/indexLayout.xml
+/.idea/.idea.Blog.dir/.idea/vcs.xml
